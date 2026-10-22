@@ -38,7 +38,7 @@ class BookController extends AbstractController
         //Test si le formulaire est soumis
         if ($this->isFormSubmitted($_POST)) {
             //Traitement en BDD de l'ajout du livre
-            $data["msg"] = $this->bookService->insertBook();
+            $data = $this->bookService->insertBook();
         }
 
         return $this->render('add_book', 'Ajouter un livre', $data ?? []);

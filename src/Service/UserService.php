@@ -5,15 +5,18 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\Tools;
+use App\Service\UploadService;
 
 class UserService
 {
     //Attribut
     private UserRepository $userRepository;
+    private UploadService $upload;
 
     public function __construct()
     {
         $this->userRepository = new UserRepository();
+        $this->upload = new UploadService();
     }
 
     public function insertUser(): string
@@ -63,7 +66,10 @@ class UserService
 
         //Setter le mot de passe hashé
         $newUser->setPassword($hash);
-
+      
+        //importer l'image
+        $newUser->setImgProfil($this->upload->uploadFile($_FILES["img_profil"], 'assets/img/profil/'));
+        
         //Ajouter en BDD le compte
         $this->userRepository->create($newUser);
 
@@ -100,15 +106,15 @@ class UserService
 
         //Renouvellement de l'id de session
         session_regenerate_id(true);
-    
+
         //Création de la super globale de session
         $_SESSION["user"] = [
-            "id"=> $user->getId(),
-            "firstname"=> $user->getFirstname(),
-            "lastname"=> $user->getLastname(),
-            "email"=> $user->getEmail(),
-            "grant"=> $user->getGrant() ?? ""
-        ];        
+            "id" => $user->getId(),
+            "firstname" => $user->getFirstname(),
+            "lastname" => $user->getLastname(),
+            "email" => $user->getEmail(),
+            "grant" => $user->getGrant() ?? ""
+        ];
         header("Refresh:2; url=/");
         return "Connexion réussie";
     }
@@ -116,7 +122,7 @@ class UserService
     /**
      * Méthode pour se déconnecter
      */
-    public function disconnect(): void 
+    public function disconnect(): void
     {
         //Supprimer la session
         session_destroy();
@@ -125,4 +131,6 @@ class UserService
         //Redirection vers home
         header('Location:/');
     }
+
+    
 }

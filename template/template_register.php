@@ -11,12 +11,15 @@
     <?php include 'component/navbar.php'; ?>
     <main class="container-fluid">
         <h1>S'inscrire</h1>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <input type="text" name="firstname" placeholder="saisir votre Prénom">
             <input type="text" name="lastname" placeholder="saisir votre Nom">
             <input type="text" name="email" placeholder="saisir votre Email">
             <input type="password" name="password" placeholder="saisir le mot de passe">
             <input type="password" name="confirm-password" placeholder="saisir le mot de passe">
+            <label for="img_profil">importer une image de profil
+            <input type="file" name="img_profil">
+            </label>
             <input type="submit" value="Inscription" name="submit">
         </form>
         <p><?= htmlspecialchars($data["msg"] ?? "", ENT_QUOTES, 'UTF-8') ?></p>
